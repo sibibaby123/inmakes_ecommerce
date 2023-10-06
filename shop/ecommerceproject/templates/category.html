@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+   {% if category %}
+     {{category.description|truncatewords:155}}
+   {% else %}
+     Nothing to show
+   {% endif %}
+{% endblock %}
+{% block title %}
+   {% if category %}
+       {{category.name}}
+   {% else %}
+      Car Showroom
+    {% endif %}
+{% endblock %}
+{% block content %}
+   {% if category %}
+       <div class = "row my_row_class">
+           <div class = "mx_auto">
+           <p><a href = "{% url 'shop:allProdCat' %}">All Products</a></p>
+       </div>
+   </div>
+   {% endif %}
+   {% if category %}
+   <div class = "container">
+   <div class = "row">
+        <img class ="my_image" src = "{{category.image.url}}" alt = "{{category.name}}">
+   </div>
+   </div>
+     <br>
+   <div>
+   <h1 class="text-center">{{category.name}}</h1>
+       <h3 class="text-justify">{{category.description}}</h3>
+   </div>
+   <br>
+   {% else %}
+   <div class = "container">
+       <div class ="row">
+       <img class="my_image my_image_padding" src = "{% static 'img/banner.png' %}" alt="all products" width="362px;" height="362px;" >
+   </div>
+   </div>
+   <div class ="container">
+       <div class = "row">
+       <h1 class ="text-center my_title"> Our Products </h1>
+       <p class ="text-justify">For brands, the shoppable content definition means when you take content (posts) that features products, and you tag those products with checkout link, price, details, etc., so that users can buy those products directly from the posts.</p>
+       </div>
+   </div>
+<br>
+   {% endif %}
+
+  <div class ="container text-center">
+      <div class ="row mx_auto">
+          {% for product in products %}
+          <div class = "my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4">
+          <div class="card text-center" style="min-width:18rem;">
+              <a href ="{{product.get_url}}"> <img class = "card-img-top my_image" src = "{{product.image.url}}" height="242px;" width="242px;" alt="all products"></a>
+                       <div class = "card-body">
+                       <h4><b> {{product.name}}</b></h4>
+                       <h4><b>{{product.price}}</b></h4>
+                      </div>
+                </div>
+          </div>
+          {% endfor %}
+      </div>
+      <div class = "mx_auto">
+          {% if products.paginator.num_pages > 1 %}
+
+         <br>
+      <div class = "text-center">
+           {% for pg in products.paginator.page_range %}
+           <a href = "?page={{pg}}" class ="btn btn-light btn-sm" "{% if products.number == pg %} active {% endif %}">{{pg}}</a>
+           {% endfor %}
+       </div>
+          {% endif %}
+  </div>
+  </div>
+
+{% endblock %}
